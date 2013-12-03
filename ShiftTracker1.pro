@@ -24,4 +24,5 @@ SOURCES += main.cpp
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES +=
+OTHER_FILES += \
+    qml/ShiftTracker1/VKart.qml

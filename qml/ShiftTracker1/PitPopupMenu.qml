@@ -1,7 +1,7 @@
 import QtQuick 1.1
 
 GridMenu {
-    id:racePopupMenu
+    id:pitPopupMenu
     width: 250
     height:250
     border.width: 3

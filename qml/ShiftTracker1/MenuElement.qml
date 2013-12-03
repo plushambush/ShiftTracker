@@ -10,7 +10,7 @@ Rectangle {
     property color hovercolor:"blue"
     property string eventid
 
-    signal menuSelected(string eventid)
+    signal menuItemSelected(string eventid)
 
 
     states: [
@@ -35,7 +35,7 @@ Rectangle {
 
         }
         onClicked: {
-            menuSelected(eventid)
+            menuItemSelected(eventid)
         }
 
 

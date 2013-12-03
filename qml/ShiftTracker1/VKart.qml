@@ -10,7 +10,7 @@ Rectangle {
     property alias team: team_num.text;
     property alias num: kart_num.text;
     property alias lifetime: time_text.counter
-    property int quality;
+    property int quality:-5;
     property int hottime:10;
 
 
@@ -124,6 +124,7 @@ Rectangle {
             smooth: true;
             source: "img/badge.png";
             Text {
+                color:"#0e232e"
                 id: team_num;
                 text:"-";
                 verticalAlignment: Text.AlignVCenter
@@ -139,6 +140,7 @@ Rectangle {
         Text {
             id: kart_num;
             //text:"88";
+            color:"#0e232e"
             smooth:true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignRight
@@ -156,6 +158,7 @@ Rectangle {
             id: time_text;
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignRight
+            color:"#0e232e"
             font.family: "Sans";
             font.pointSize: 10;
             anchors.right:back.right;
@@ -163,11 +166,7 @@ Rectangle {
             anchors.bottom: back.bottom;
             anchors.bottomMargin: 3;
         }
-        MouseArea {
-            id:kartMenuArea
-            anchors.fill:parent
-            onClicked: racePopupMenu.openPopupMenuFor("RacePopupMenu",kart)
-        }
+
 
   }
 

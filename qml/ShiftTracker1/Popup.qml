@@ -6,25 +6,33 @@ Rectangle {
     color:"transparent"
     anchors.fill:parent
 
-
-    signal openPopupMenuFor(string menuName,variant target)
-    signal closePopupMenu
-    signal menuSelected(string menuItem)
     property string name
     property Item target
+    property variant tag
     property Item delegate
+    property Item receiver
+
+    signal openPopupMenuFor(variant target,string menuName,variant tag,variant receiver)
+    signal closePopupMenu
+    signal menuItemSelected(string menuItem)
+    signal menuSelected(string menuName,string menuItem,variant tag)
+
+
 
 
     onOpenPopupMenuFor: {
         if (menuName==name && delegate && target) {
+            popup.tag=tag
             popup.target=target
+            popup.receiver=receiver
             z=100
             var centerx=target.width/2
             var centery=target.height/2
-            var P=mapFromItem(target,centerx,centery)
+            var P=delegate.mapFromItem(target,centerx,centery)
 
-            delegate.x=P.x-delegate.width/2
-            delegate.y=P.y-delegate.height/2
+            delegate.x+=P.x-delegate.width/2
+            delegate.y+=P.y-delegate.height/2
+
             if (delegate.x<0) delegate.x=0
             if (delegate.y<0) delegate.y=0
             visible=true
@@ -34,18 +42,20 @@ Rectangle {
     onClosePopupMenu:
         visible=false
 
-    onMenuSelected: {
+    onMenuItemSelected: {
         visible=false
-        if (target && target.menuSelected)
-            target.menuSelected(menuItem)
+        if (receiver)
+            receiver.menuSelected(name,menuItem,tag)
+        else
+            menuSelected(name,menuItem,tag)
     }
 
-    function connectMenuSelected(source,target) {
-        if (source.menuSelected) {
-            source.menuSelected.connect(target.menuSelected)
+    function connectMenuItemSelected(source,target) {
+        if (source.menuItemSelected) {
+            source.menuItemSelected.connect(target.menuItemSelected)
         }
         for(var i=0;i<source.children.length;i++) {
-            connectMenuSelected(source.children[i],target)
+            connectMenuItemSelected(source.children[i],target)
         }
     }
 
@@ -53,7 +63,7 @@ Rectangle {
         parent.openPopupMenuFor.connect(popup.openPopupMenuFor)
         parent.closePopupMenu.connect(popup.closePopupMenu)
         delegate.parent=popup
-        connectMenuSelected(delegate,popup)
+        connectMenuItemSelected(delegate,popup)
 
     }
 

@@ -5,9 +5,11 @@ Rectangle {
     id:root
     width: 800
     height: 600
+    anchors.fill:parent
+    color:"#0e232e"
 
     signal rootMouseClicked
-    signal openPopupMenuFor(string menuName,variant target)
+    signal openPopupMenuFor(variant target,string menuName,variant tag,variant receiver)
     signal closePopupMenu
 
 
