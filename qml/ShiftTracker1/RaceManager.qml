@@ -4,36 +4,25 @@ Column{
     id: raceManager
     //width: 320
     //height: 370
-    anchors.top: raceMenuRow.bottom
-    anchors.topMargin: 20
+
+    property int racePoolSize:12
+    property int pitPoolSize:4
+    property int sparePoolSize:2
+    property int hottime:45*60
     anchors.horizontalCenter: parent.horizontalCenter
     spacing:20
 
     ListModel {
         id: raceList
-        ListElement { kart:1; team:1; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:2; team:2; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:3; team:3; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:4; team:4; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:5; team:5; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:6; team:6; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:7; team:7; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:8; team:8; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:9; team:9; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:10; team:10; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:11; team:11; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:12; team:12; quality:'';lifetime:0; hottime:10 }
-        ListElement { kart:17; team:17; quality:'';lifetime:0; hottime:10 }
+
     }
 
     ListModel {
         id: pitList
-        ListElement { kart:13; team:'';quality:'';lifetime:0; hottime:10}
-        ListElement { kart:14; team:'';quality:'';lifetime:0; hottime:10}
-        ListElement { kart:15; team:'';quality:'';lifetime:0; hottime:10}
-        ListElement { kart:16; team:'';quality:'';lifetime:0; hottime:10}
-        //ListElement { kart:18; team:'';quality:'';lifetime:0; hottime:10}
+
     }
+
+
 
     GridDecor {
         id: raceRect
@@ -111,9 +100,24 @@ Column{
 
     signal menuSelected(string menuName,string menuItem,variant tag)
     signal raceTimeTick()
+    signal raceTimeReset()
+    signal reset()
 
     onRaceTimeTick: {
         for(var i=0;i<raceList.count;i++) raceList.setProperty(i,'lifetime',raceList.get(i).lifetime+1)
+    }
+
+    onRaceTimeReset: {
+        for(var i=0;i<raceList.count;i++) raceList.setProperty(i,'lifetime',0)
+    }
+
+    onReset: {
+        raceList.clear()
+        pitList.clear()
+        var lastnum
+        lastnum=fillListWithKarts(raceList,racePoolSize,1)
+        fillListWithKarts(pitList,pitPoolSize,lastnum)
+        fillListWithTeams(raceList,1)
     }
 
     onMenuSelected: {
@@ -167,6 +171,21 @@ Column{
         pitList.remove(0)
         pitList.append({'kart':arrived_kart,'quality':arrived_quality,'team':'','lifetime':0})
 
+    }
+    function fillListWithKarts(list,size,startfrom) {
+        var kart=startfrom
+        for (var i=1;i<=size;i++) {
+            list.append({'kart':startfrom++,'team':'','lifetime':-1,'quality':-5,'hottime':hottime})
+        }
+        return kart
+    }
+
+    function fillListWithTeams(list,startfrom) {
+        var team=startfrom
+        for (var i=0;i<list.count;i++) {
+            list.setProperty(i,'team',team++)
+        }
+        return team
     }
 
 }

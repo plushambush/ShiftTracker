@@ -26,9 +26,39 @@ Flipable {
 
     front:Root {
         id:root;
+        Column {
+            anchors.fill:parent
+            spacing: 20
+            TopMenu {
+                id:raceMenu
+                onStartRace: raceTimer.start()
+                onStopRace: raceTimer.stop()
+                onShowSettings: main.flipped=!main.flipped
+                onResetRace: {
+                    raceTimer.stop()
+                    raceManager.raceTimeReset()
+                    raceMenu.raceTimeReset()
+                    raceManager.reset()
+                }
+            }
 
-        TopMenu {id:raceMenuRow}
-        RaceManager {id:raceManager}
+
+            RaceManager {id:raceManager}
+        }
+
+
+        Timer {
+            id:raceTimer
+            interval:1000
+            repeat: true
+            running:false
+            triggeredOnStart: false
+
+            onTriggered: {
+                raceManager.raceTimeTick()
+                raceMenu.raceTimeTick()
+            }
+        }
 
         Popup {
             id:racePopupMenu
@@ -44,47 +74,12 @@ Flipable {
 
     }
 
-    back:Rectangle {
-        id:settingsPage
-        anchors.fill:parent
-        color: "blue"
-
-        Row {
-            id: settingsMenuRow
-            height: 30
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            Rectangle {
-                id: backRect
-                width: parent.width/4
-                color: "#ffffff"
-                border.width: 1
-                border.color: "black"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.top: parent.top
-                anchors.topMargin: 0
-
-                Text {
-                    id: backText
-                    text:"Back"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: main.flipped=!main.flipped
-                }
-            }
-
-        }
-
-
+    back:Settings {
+        onGoBack:main.flipped=!main.flipped
     }
+
+
+
 
 
 }

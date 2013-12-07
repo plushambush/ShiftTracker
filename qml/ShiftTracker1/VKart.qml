@@ -74,9 +74,11 @@ Rectangle {
         },
         State {
             name: "empty";
+            when: team==""
             PropertyChanges {
                 target:badge;
                 visible: false;
+
             }
             PropertyChanges {
                 target:time_text;
@@ -126,7 +128,7 @@ Rectangle {
             Text {
                 color:"#0e232e"
                 id: team_num;
-                text:"-";
+                text:"";
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.family: "Arial";

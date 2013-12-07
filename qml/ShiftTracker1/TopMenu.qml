@@ -1,141 +1,67 @@
 import QtQuick 1.1
 
-
-Row {
-    id: raceMenuRow
-    height: 30
-    anchors.right: parent.right
-    anchors.rightMargin: 0
-    anchors.left: parent.left
-    anchors.leftMargin: 0
-    anchors.top: parent.top
-    anchors.topMargin: 0
-    Rectangle {
-        id: startStopRect
-        width: parent.width/4
-        color: "#ffffff"
-        border.width: 1
-        border.color: "black"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        state:"stopped"
-
-        Text {
-            id: startStopText
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                if (parent.state=="started") {
-                    parent.state="stopped"
-                    raceTimer.stop()
-                }
-                else {
-                    parent.state="started"
-                    raceTimer.start()
-
-                }
-            }
-
-        }
-
-        states:[
+HorizontalMenu {
+    HorizontalMenuItem {
+        id:settings
+        text:"Settings"
+        onHorizontalMenuItemClicked: showSettings()
+    }
+    HorizontalMenuItem {
+        id:startstop
+        text:"Start"
+        state:"Stopped"
+        states: [
             State {
-                name:"started"
+                name:"Stopped"
                 PropertyChanges {
-                    target: startStopText
-                    text:"Stop"
+                    target: startstop
+                    text:"Start"
                 }
-
-
             },
             State {
-                name:"stopped"
+                name:"Started"
                 PropertyChanges {
-                    target: startStopText
-                    text: "Start"
+                    target: startstop
+                    text:"Stop"
                 }
             }
+
         ]
-    }
-
-    Rectangle {
-        id: settingsRect
-        width: parent.width/4
-        color: "#ffffff"
-        border.width: 1
-        border.color: "black"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-
-        Text {
-            id: settingsText
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("Settings")
-
-        }
-        MouseArea {
-            anchors.fill:parent
-            onClicked: main.flipped = !main.flipped
-        }
-    }
-
-    Rectangle {
-        id: resetRect
-        width: parent.width/4
-        color: "#ffffff"
-        border.width: 1
-        border.color: "black"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-
-        Text {
-            id: resetText
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("Reset")
-
-        }
-    }
-
-    Rectangle {
-        id: raceTimerRect
-        width: parent.width/4
-        color: "#ffffff"
-        border.width: 1
-        border.color: "black"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        RaceTime {
-            id:raceTimerText
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            counter: 0
-        }
-        Timer {
-            id:raceTimer
-            interval:1000
-            repeat: true
-            running:false
-            triggeredOnStart: false
-
-            onTriggered: {
-                raceManager.raceTimeTick()
-                raceTimerText.counter+=1
-
+        onHorizontalMenuItemClicked: {
+            if (startstop.state=="Started") {
+                stopRace()
+                startstop.state="Stopped"
             }
-
+            else {
+                startRace()
+                startstop.state="Started"
+            }
         }
     }
+    HorizontalMenuItem {
+        id:reset
+        text:"Reset"
+        onHorizontalMenuItemClicked: resetRace()
+    }
+    HorizontalMenuItem {
+        id:timer
+        text:time.text
+        RaceTime {id:time;visible:false}
+    }
+
+    signal showSettings
+    signal startRace
+    signal stopRace
+    signal resetRace
+    signal raceTimeReset()
+    signal raceTimeTick()
+
+    onRaceTimeTick: time.counter++
+
+    onRaceTimeReset: time.counter=-1
+
+
+
 }
+
+
