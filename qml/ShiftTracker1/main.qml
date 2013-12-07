@@ -1,7 +1,6 @@
 import QtQuick 1.1
 
 Flipable {
-
     id:main
     width: 600
     height:600
@@ -23,12 +22,16 @@ Flipable {
         NumberAnimation { target: rotation; property: "angle"; duration: 500 }
     }
 
+    ListModel {id: raceList
+        ListElement {kart:1;team:2;quality:-5;hottime:10;lifetime:0}}
+    ListModel {id: pitList}
+
 
     front:Root {
         id:root;
         Column {
             anchors.fill:parent
-            spacing: 20
+            spacing: 30
             TopMenu {
                 id:raceMenu
                 onStartRace: raceTimer.start()
@@ -70,6 +73,12 @@ Flipable {
             id:pitPopupMenu
             name:"PitPopupMenu"
             delegate:PitPopupMenu {}
+        }
+
+        Popup {
+            id:shiftPopupMenu
+            name:"ShiftPopupMenu"
+            delegate:ShiftPopupMenu {}
         }
 
     }

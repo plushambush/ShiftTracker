@@ -11,7 +11,7 @@ Rectangle {
     property alias num: kart_num.text;
     property alias lifetime: time_text.counter
     property int quality:-5;
-    property int hottime:10;
+    property int hottime:24*60*60;
 
 
 

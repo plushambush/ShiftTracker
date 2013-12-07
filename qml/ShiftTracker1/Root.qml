@@ -10,6 +10,14 @@ Rectangle {
     signal openPopupMenuFor(variant target,string menuName,variant tag,variant receiver)
     signal closePopupMenu
 
+    Text {
+        text:"FCVP"
+        font.family: "Impact"
+        font.pixelSize: 300
+        anchors.centerIn:parent
+        color:"white"
+        opacity: 0.02
+    }
 
     MouseArea {
         id:mouseroot

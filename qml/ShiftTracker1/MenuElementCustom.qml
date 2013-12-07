@@ -1,7 +1,7 @@
 import QtQuick 1.1
 
 Rectangle {
-    id:menuitem
+    id:menuElementCustom
     width:childrenRect.width+1
     height:childrenRect.height+1
     color:"transparent"
@@ -9,6 +9,7 @@ Rectangle {
 
     property color hovercolor:"blue"
     property string eventid
+    property Item delegate
 
     signal menuItemSelected(string eventid)
 
@@ -17,7 +18,7 @@ Rectangle {
         State {
             name:"Focus"
             PropertyChanges {
-                target: menuitem
+                target: menuElementCustom
                 color:hovercolor
             }
         }

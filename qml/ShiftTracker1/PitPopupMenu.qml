@@ -2,13 +2,6 @@ import QtQuick 1.1
 
 GridMenu {
     id:pitPopupMenu
-    width: 250
-    height:250
-    border.width: 3
-    border.color:"red"
-    radius:10
-    opacity:0.8
-
     MenuElementIcon {
         icon:"img/K2.png"
         text:"Slow"
@@ -51,7 +44,7 @@ GridMenu {
         eventid: "KART_DELETE"
     }
     MenuElementIcon {
-        icon:"img/tool2.png"
+        icon:"img/tool.png"
         text:"Repair"
         eventid: "KART_REPAIR"
     }

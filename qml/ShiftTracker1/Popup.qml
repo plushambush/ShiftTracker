@@ -33,8 +33,13 @@ Rectangle {
             delegate.x+=P.x-delegate.width/2
             delegate.y+=P.y-delegate.height/2
 
+            var offx=delegate.x+delegate.width-width
+            var offy=delegate.y+delegate.height-height
+            if (offx>0) delegate.x-=offx
+            if (offy>0) delegate.y-=offy
             if (delegate.x<0) delegate.x=0
             if (delegate.y<0) delegate.y=0
+
             visible=true
         }
     }

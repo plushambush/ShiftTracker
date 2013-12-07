@@ -1,31 +1,20 @@
 import QtQuick 1.1
+import "Sort.js" 1.0 as Sort
 
 Column{
     id: raceManager
-    //width: 320
-    //height: 370
-
     property int racePoolSize:12
     property int pitPoolSize:4
     property int sparePoolSize:2
-    property int hottime:45*60
+    property int hottime:10
+    property string sortorder:"number"
     anchors.horizontalCenter: parent.horizontalCenter
-    spacing:20
-
-    ListModel {
-        id: raceList
-
-    }
-
-    ListModel {
-        id: pitList
-
-    }
-
+    spacing:30
 
 
     GridDecor {
         id: raceRect
+        name:"Race"
         width:320
         height:320
         anchors.horizontalCenter: parent.horizontalCenter;
@@ -52,6 +41,7 @@ Column{
 
     GridDecor {
         id: pitRect
+        name:"Pit"
         width: 320
         height: 80
         GridView {
@@ -88,14 +78,22 @@ Column{
         height: 60
         anchors.verticalCenter: pitRect.verticalCenter
         fillMode: Image.PreserveAspectCrop
-        source: "img/swap2.png"
+        source: "img/swap.png"
         MouseArea {
             anchors.fill:parent
             acceptedButtons: Qt.LeftButton
             onClicked: {
-                swapKart(raceList.count-1)
+                shiftPopupMenu.openPopupMenuFor(swapBtn,"ShiftPopupMenu",raceList,raceManager)
             }
         }
+    }
+
+    SideMenu {
+        id:sideMenu
+        anchors.top: raceRect.top
+        anchors.left:raceRect.right
+        anchors.leftMargin: 2
+        onMenuSelected: raceManager.sortorder=eventid
     }
 
     signal menuSelected(string menuName,string menuItem,variant tag)
@@ -105,6 +103,7 @@ Column{
 
     onRaceTimeTick: {
         for(var i=0;i<raceList.count;i++) raceList.setProperty(i,'lifetime',raceList.get(i).lifetime+1)
+
     }
 
     onRaceTimeReset: {
@@ -118,40 +117,54 @@ Column{
         lastnum=fillListWithKarts(raceList,racePoolSize,1)
         fillListWithKarts(pitList,pitPoolSize,lastnum)
         fillListWithTeams(raceList,1)
+        sortorder="kart"
+        sortRaceList()
     }
+
+    Component.onCompleted: reset()
 
     onMenuSelected: {
         switch (menuName) {
         case "RacePopupMenu": {
-            var i=getIndexByKart(raceList,tag)
+            var i=getIndexByProp(raceList,'kart',tag)
             switch (menuItem) {
-            case "QUALITY_SLOW": raceList.setProperty(i,'quality',-1)
-            case "QUALITY_NEUTRAL": raceList.setProperty(i,'quality',0)
-            case "QUALITY_FAST": raceList.setProperty(i,'quality',1)
-            case "QUALITY_TRASH": raceList.setProperty(i,'quality',-2)
-            case "QUALITY_UNKNOWN": raceList.setProperty(i,'quality',-5)
-            case "QUALITY_ROCKET": raceList.setProperty(i,'quality',2)
-            case "KART_DELETE": raceList.remove(i)
+            case "QUALITY_SLOW": {raceList.setProperty(i,'quality',-1);break}
+            case "QUALITY_NEUTRAL": {raceList.setProperty(i,'quality',0);break}
+            case "QUALITY_FAST": {raceList.setProperty(i,'quality',1);break}
+            case "QUALITY_TRASH": {raceList.setProperty(i,'quality',-2);break}
+            case "QUALITY_UNKNOWN":{ raceList.setProperty(i,'quality',-5);break}
+            case "QUALITY_ROCKET": {raceList.setProperty(i,'quality',2);break}
+            case "KART_DELETE": {raceList.remove(i);break}
+            case "KART_SHIFT":{swapKart(i);break}
             }
+            sortRaceList()
+            break
         }
         case "PitPopupMenu": {
-            var i=getIndexByKart(pitList,tag)
+            var i=getIndexByProp(pitList,'kart',tag)
             switch (menuItem) {
-            case "QUALITY_SLOW": pitList.setProperty(i,'quality',-1)
-            case "QUALITY_NEUTRAL": pitList.setProperty(i,'quality',0)
-            case "QUALITY_FAST": pitList.setProperty(i,'quality',1)
-            case "QUALITY_TRASH": pitList.setProperty(i,'quality',-2)
-            case "QUALITY_UNKNOWN": pitList.setProperty(i,'quality',-5)
-            case "QUALITY_ROCKET": pitList.setProperty(i,'quality',2)
-            case "KART_DELETE": pitList.remove(i)
+            case "QUALITY_SLOW": {pitList.setProperty(i,'quality',-1);break}
+            case "QUALITY_NEUTRAL": {pitList.setProperty(i,'quality',0);break}
+            case "QUALITY_FAST": {pitList.setProperty(i,'quality',1);break}
+            case "QUALITY_TRASH": {pitList.setProperty(i,'quality',-2);break}
+            case "QUALITY_UNKNOWN": {pitList.setProperty(i,'quality',-5);break}
+            case "QUALITY_ROCKET": {pitList.setProperty(i,'quality',2);break}
+            case "KART_DELETE": {pitList.remove(i);break}
             }
+            break
+        }
+        case "ShiftPopupMenu": {
+            var i=getIndexByProp(raceList,'team',menuItem)
+            swapKart(i)
+            sortRaceList()
+            break
         }
         }
     }
 
-    function getIndexByKart(list,kart) {
+    function getIndexByProp(list,prop,val) {
         for (var i=0;i<list.count;i++) {
-            if (list.get(i).kart==kart) {
+            if (Sort.qs_prop(list,i,prop)==val) {
                 return i
             }
         }
@@ -175,7 +188,7 @@ Column{
     function fillListWithKarts(list,size,startfrom) {
         var kart=startfrom
         for (var i=1;i<=size;i++) {
-            list.append({'kart':startfrom++,'team':'','lifetime':-1,'quality':-5,'hottime':hottime})
+            list.append({'kart':kart++,'team':'','lifetime':0,'quality':-5,'hottime':hottime})
         }
         return kart
     }
@@ -187,5 +200,11 @@ Column{
         }
         return team
     }
+
+    function sortRaceList() {
+        Sort.qsort(raceList,sortorder)
+    }
+
+    onSortorderChanged: sortRaceList()
 
 }
