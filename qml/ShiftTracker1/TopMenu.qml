@@ -58,7 +58,7 @@ HorizontalMenu {
 
     onRaceTimeTick: time.counter++
 
-    onRaceTimeReset: time.counter=-1
+    onRaceTimeReset: time.counter=0
 
 
 

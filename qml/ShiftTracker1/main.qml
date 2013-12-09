@@ -3,7 +3,7 @@ import QtQuick 1.1
 Flipable {
     id:main
     width: 600
-    height:600
+    height:650
 
     property bool flipped: false
     transform: Rotation {
@@ -22,10 +22,14 @@ Flipable {
         NumberAnimation { target: rotation; property: "angle"; duration: 500 }
     }
 
-    ListModel {id: raceList
-        ListElement {kart:1;team:2;quality:-5;hottime:10;lifetime:0}}
+    ListModel {id: raceList}
     ListModel {id: pitList}
+    ListModel {id: spareList}
 
+    property int kartsInRace:12
+    property int kartsInPit:4
+    property int kartsInSpare:3
+    property int timeToShift:45
 
     front:Root {
         id:root;
@@ -84,7 +88,9 @@ Flipable {
     }
 
     back:Settings {
-        onGoBack:main.flipped=!main.flipped
+        onGoBack: {
+             main.flipped=!main.flipped
+        }
     }
 
 

@@ -5,11 +5,23 @@ Rectangle {
     anchors.fill:parent
     color:"#0e232e"
 
+
     signal goBack
     Column {
         anchors.fill:parent
         SettingsMenu{
-            //onGoBack: goBack
+            onGoBackPressed: {
+                main.kartsInRace=settingsForm.kartsInRaceValue
+                main.kartsInPit=settingsForm.kartsInPitValue
+                main.kartsInSpare=settingsForm.kartsInSpareValue
+                main.timeToShift=settingsForm.timeToShiftValue
+                goBack()
+            }
+
+        }
+        SettingsForm {
+            id:settingsForm
+
         }
     }
 }

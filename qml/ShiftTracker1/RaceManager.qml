@@ -3,10 +3,10 @@ import "Sort.js" 1.0 as Sort
 
 Column{
     id: raceManager
-    property int racePoolSize:12
-    property int pitPoolSize:4
-    property int sparePoolSize:2
-    property int hottime:10
+    //property int racePoolSize:12
+    //property int pitPoolSize:4
+    //property int sparePoolSize:2
+    //property int hottime:10
     property string sortorder:"number"
     anchors.horizontalCenter: parent.horizontalCenter
     spacing:30
@@ -52,8 +52,6 @@ Column{
             snapMode: GridView.SnapOneRow
             boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.AutoFlickDirection
-            //contentWidth: 420
-            //contentHeight: 80
             clip:true
             flow:GridView.TopToBottom
 
@@ -61,7 +59,7 @@ Column{
             cellHeight: 70
             model: pitList
             delegate: Item {
-                VKart {id:pkart;team:model.team; num:kart; lifetime: model.lifetime; hottime: model.hottime; quality:model.quality}
+                VKart {id:pkart;num:kart; quality:model.quality}
                 MouseArea {
                     anchors.fill:pkart
                     onClicked:pitPopupMenu.openPopupMenuFor(pkart,"PitPopupMenu",pkart.num,raceManager)
@@ -69,6 +67,37 @@ Column{
             }
         }
     }
+
+    GridDecor {
+        id: spareRect
+        name:"Spare"
+        width: 320
+        height: 80
+        visible:false
+        GridView {
+            id:spareGrid
+            anchors.topMargin: 6
+            anchors.leftMargin: 12
+            anchors.fill: parent
+            snapMode: GridView.SnapOneRow
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.AutoFlickDirection
+            clip:true
+            flow:GridView.TopToBottom
+
+            cellWidth:70
+            cellHeight: 70
+            model: spareList
+            delegate: Item {
+                VKart {id:skart;team:model.team; num:kart; lifetime: model.lifetime; hottime: model.hottime; quality:model.quality}
+                MouseArea {
+                    anchors.fill:skart
+                    onClicked:sparePopupMenu.openPopupMenuFor(skart,"SparePopupMenu",skart.num,raceManager)
+                }
+            }
+        }
+    }
+
 
     Image {
         id: swapBtn
@@ -114,8 +143,9 @@ Column{
         raceList.clear()
         pitList.clear()
         var lastnum
-        lastnum=fillListWithKarts(raceList,racePoolSize,1)
-        fillListWithKarts(pitList,pitPoolSize,lastnum)
+        lastnum=fillListWithKarts(raceList,main.kartsInRace,1)
+        lastnum=fillListWithKarts(pitList,main.kartsInPit,lastnum)
+        lastnum=fillListWithKarts(spareList,main.kartsInSpare,lastnum)
         fillListWithTeams(raceList,1)
         sortorder="kart"
         sortRaceList()
@@ -180,7 +210,7 @@ Column{
         var new_quality=pitList.get(0).quality
 
         raceList.remove(index)
-        raceList.insert(0,{'kart':new_kart, 'team':arrived_team,'quality':new_quality,'lifetime':0,'hottime':10})
+        raceList.insert(0,{'kart':new_kart, 'team':arrived_team,'quality':new_quality,'lifetime':0,'hottime':main.timeToShift*60})
         pitList.remove(0)
         pitList.append({'kart':arrived_kart,'quality':arrived_quality,'team':'','lifetime':0})
 
@@ -188,7 +218,7 @@ Column{
     function fillListWithKarts(list,size,startfrom) {
         var kart=startfrom
         for (var i=1;i<=size;i++) {
-            list.append({'kart':kart++,'team':'','lifetime':0,'quality':-5,'hottime':hottime})
+            list.append({'kart':kart++,'team':'','lifetime':0,'quality':-5,'hottime':main.timeToShift*60})
         }
         return kart
     }
