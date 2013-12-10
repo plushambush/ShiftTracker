@@ -85,6 +85,13 @@ Flipable {
             delegate:ShiftPopupMenu {}
         }
 
+        Popup {
+            id:sparePopupMenu
+            name:"SparePopupMenu"
+            delegate:SparePopupMenu {}
+        }
+
+
     }
 
     back:Settings {

@@ -39,16 +39,22 @@ GridMenu {
     }
 
     MenuElementIcon {
-        icon:"img/delete.png"
-        text:"Remove"
-        eventid: "KART_DELETE"
+        icon:"img/down.png"
+        text:"To spare"
+        eventid: "KART_TOSPARE"
     }
     MenuElementIcon {
         icon:"img/tool.png"
-        text:"Repair"
-        eventid: "KART_REPAIR"
+        text:"Broken"
+        eventid: "KART_BROKEN"
     }
-    Rectangle {width:60;height:60;color:"transparent"}
+
+    MenuElementIcon {
+        icon:"img/move.png"
+        text:"Move left"
+        eventid: "KART_MOVE"
+    }
+
 }
 
 

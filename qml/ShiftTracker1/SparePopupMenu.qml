@@ -1,7 +1,7 @@
 import QtQuick 1.1
 
 GridMenu {
-    id:racePopupMenu
+    id:sparePopupMenu
     MenuElementIcon {
         icon:"img/K2.png"
         text:"Slow"
@@ -39,21 +39,24 @@ GridMenu {
     }
 
     MenuElementIcon {
-        icon:"img/disqual.png"
-        text:"Disqual"
-        eventid: "TEAM_DISQUAL"
-    }
-    MenuElementIcon {
-        icon:"img/breakage.png"
-        text:"Breakage"
-        eventid: "KART_BREAKAGE"
+        icon:"img/up.png"
+        text:"To pit"
+        eventid: "KART_TOPIT"
     }
 
     MenuElementIcon {
-        icon:"img/swap.png"
-        text:"Shift"
-        eventid: "KART_SHIFT"
+        icon:"img/ok.png"
+        text:"Repaired"
+        eventid: "KART_REPAIRED"
     }
+
+    MenuElementIcon {
+        icon:"img/tool.png"
+        text:"Broken"
+        eventid: "KART_BROKEN"
+    }
+
+
 
 }
 

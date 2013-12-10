@@ -11,8 +11,8 @@ Rectangle {
     property alias num: kart_num.text;
     property alias lifetime: time_text.counter
     property int quality:-5;
-    property int hottime:24*60*60;
-
+    property int hottime
+    property alias broken:broken_img.visible
 
 
     onLifetimeChanged:   {
@@ -22,8 +22,6 @@ Rectangle {
         else {
             kart.state= "normal"
         }
-
-
     }
 
     onHottimeChanged: {
@@ -121,6 +119,15 @@ Rectangle {
             x:5;
             y:5;
         }
+
+        Image {
+            id:broken_img
+            source:"img/damaged.png"
+            visible:false
+            x:4
+            y:4
+        }
+
         Image {
             id: badge;
             smooth: true;

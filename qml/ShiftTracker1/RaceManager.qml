@@ -30,7 +30,7 @@ Column{
             snapMode: GridView.SnapToRow
             model: raceList;
             delegate: Item {
-                VKart {id:rkart;team:model.team; num:kart; lifetime: model.lifetime; hottime: model.hottime; quality:model.quality}
+                VKart {id:rkart;team:model.team; num:kart; lifetime: model.lifetime; hottime: model.hottime; quality:model.quality; broken:model.broken}
                 MouseArea {
                     anchors.fill:rkart
                     onClicked:racePopupMenu.openPopupMenuFor(rkart,"RacePopupMenu",rkart.num,raceManager)
@@ -59,7 +59,7 @@ Column{
             cellHeight: 70
             model: pitList
             delegate: Item {
-                VKart {id:pkart;num:kart; quality:model.quality}
+                VKart {id:pkart;num:kart; quality:model.quality; broken:model.broken}
                 MouseArea {
                     anchors.fill:pkart
                     onClicked:pitPopupMenu.openPopupMenuFor(pkart,"PitPopupMenu",pkart.num,raceManager)
@@ -73,7 +73,7 @@ Column{
         name:"Spare"
         width: 320
         height: 80
-        visible:false
+
         GridView {
             id:spareGrid
             anchors.topMargin: 6
@@ -89,7 +89,7 @@ Column{
             cellHeight: 70
             model: spareList
             delegate: Item {
-                VKart {id:skart;team:model.team; num:kart; lifetime: model.lifetime; hottime: model.hottime; quality:model.quality}
+                VKart {id:skart;team:model.team; num:kart; lifetime: model.lifetime; hottime: model.hottime; quality:model.quality; broken:model.broken}
                 MouseArea {
                     anchors.fill:skart
                     onClicked:sparePopupMenu.openPopupMenuFor(skart,"SparePopupMenu",skart.num,raceManager)
@@ -142,6 +142,7 @@ Column{
     onReset: {
         raceList.clear()
         pitList.clear()
+        spareList.clear()
         var lastnum
         lastnum=fillListWithKarts(raceList,main.kartsInRace,1)
         lastnum=fillListWithKarts(pitList,main.kartsInPit,lastnum)
@@ -157,6 +158,7 @@ Column{
         switch (menuName) {
         case "RacePopupMenu": {
             var i=getIndexByProp(raceList,'kart',tag)
+            var team=raceList.get(i).team
             switch (menuItem) {
             case "QUALITY_SLOW": {raceList.setProperty(i,'quality',-1);break}
             case "QUALITY_NEUTRAL": {raceList.setProperty(i,'quality',0);break}
@@ -164,14 +166,16 @@ Column{
             case "QUALITY_TRASH": {raceList.setProperty(i,'quality',-2);break}
             case "QUALITY_UNKNOWN":{ raceList.setProperty(i,'quality',-5);break}
             case "QUALITY_ROCKET": {raceList.setProperty(i,'quality',2);break}
-            case "KART_DELETE": {raceList.remove(i);break}
-            case "KART_SHIFT":{swapKart(i);break}
+            case "KART_BREAKAGE": {raceDoBreakage(raceList,pitList,spareList,team);break}
+            case "KART_SHIFT":{raceDoShift(raceList,pitList,spareList,team);break}
+            case "TEAM_DISQUAL":{raceDoDisqual(raceList,pitList,spareList,team);break}
             }
             sortRaceList()
             break
         }
         case "PitPopupMenu": {
             var i=getIndexByProp(pitList,'kart',tag)
+
             switch (menuItem) {
             case "QUALITY_SLOW": {pitList.setProperty(i,'quality',-1);break}
             case "QUALITY_NEUTRAL": {pitList.setProperty(i,'quality',0);break}
@@ -179,13 +183,31 @@ Column{
             case "QUALITY_TRASH": {pitList.setProperty(i,'quality',-2);break}
             case "QUALITY_UNKNOWN": {pitList.setProperty(i,'quality',-5);break}
             case "QUALITY_ROCKET": {pitList.setProperty(i,'quality',2);break}
-            case "KART_DELETE": {pitList.remove(i);break}
+            case "KART_MOVE": {pitDoMove(raceList,pitList,spareList,tag);break}
+            case "KART_TOSPARE": {pitDoToSpare(raceList,pitList,spareList,tag);break}
+            case "KART_BROKEN": {pitList.setProperty(i,'broken',true);break}
             }
             break
         }
+        case "SparePopupMenu": {
+            var i=getIndexByProp(spareList,'kart',tag)
+
+            switch (menuItem) {
+            case "QUALITY_SLOW": {spareList.setProperty(i,'quality',-1);break}
+            case "QUALITY_NEUTRAL": {spareList.setProperty(i,'quality',0);break}
+            case "QUALITY_FAST": {spareList.setProperty(i,'quality',1);break}
+            case "QUALITY_TRASH": {spareList.setProperty(i,'quality',-2);break}
+            case "QUALITY_UNKNOWN": {spareList.setProperty(i,'quality',-5);break}
+            case "QUALITY_ROCKET": {spareList.setProperty(i,'quality',2);break}
+            case "KART_TOPIT": {spareDoToPit(raceList,pitList,spareList,tag);break}
+            case "KART_BROKEN": {spareList.setProperty(i,'broken',true);break}
+            case "KART_REPAIRED": {spareList.setProperty(i,'broken',false);break}
+            }
+            break
+        }
+
         case "ShiftPopupMenu": {
-            var i=getIndexByProp(raceList,'team',menuItem)
-            swapKart(i)
+            raceDoShift(raceList,pitList,spareList,menuItem)
             sortRaceList()
             break
         }
@@ -202,7 +224,73 @@ Column{
     }
 
 
-    function swapKart(index) {
+    function raceDoShift(raceList,pitList,spareList,team) {
+        var index=getIndexByProp(raceList,'team',team)
+        var old_kart=raceList.get(index).kart
+        var old_quality=raceList.get(index).quality
+        var new_kart=pitList.get(0).kart
+        var new_quality=pitList.get(0).quality
+
+        raceList.remove(index)
+        raceList.insert(0,{'kart':new_kart, 'team':team,'quality':new_quality,'lifetime':0,'hottime':main.timeToShift*60,'broken':false})
+        pitList.remove(0)
+        pitList.append({'kart':old_kart,'quality':old_quality,'team':'','lifetime':0,'broken':false})
+
+    }
+
+    function raceDoDisqual(raceList,pitList,spareList,team) {
+        var index=getIndexByProp(raceList,'team',team)
+        var old_kart=raceList.get(index).kart
+        var old_quality=raceList.get(index).quality
+        raceList.remove(index)
+        pitList.append({'kart':old_kart,'quality':old_quality,'team':'','lifetime':0})
+    }
+
+    function raceDoBreakage(raceList,pitList,spareList,team) {
+        var index=getIndexByProp(raceList,'team',team)
+        var old_kart=raceList.get(index).kart
+        var old_quality=raceList.get(index).quality
+        var new_kart=pitList.get(0).kart
+        var new_quality=pitList.get(0).quality
+
+        raceList.remove(index)
+        raceList.insert(0,{'kart':new_kart, 'team':team,'quality':new_quality,'lifetime':0,'hottime':main.timeToShift*60,'broken':false})
+        pitList.remove(0)
+        pitList.append({'kart':old_kart,'quality':old_quality,'team':'','lifetime':0, 'broken':true})
+
+    }
+
+    function pitDoMove(raceList,pitList,spareList,kart) {
+        var index=getIndexByProp(pitList,'kart',kart)
+        if (index!=0) {
+            Sort.qs_swap(pitList,index-1,index,'kart')
+        }
+    }
+
+    function pitDoToSpare(raceList,pitList,spareList,kart) {
+        var index=getIndexByProp(pitList,'kart',kart)
+        var old_kart=pitList.get(index).kart
+        var old_quality=pitList.get(index).quality
+        var old_broken=pitList.get(index).broken
+        spareList.append({'kart':old_kart,'quality':old_quality,'broken':old_broken})
+        pitList.remove(index)
+
+
+    }
+
+    function spareDoToPit(raceList,pitList,spareList,kart) {
+        var index=getIndexByProp(spareList,'kart',kart)
+        var old_kart=spareList.get(index).kart
+        var old_quality=spareList.get(index).quality
+        var old_broken=spareList.get(index).broken
+        pitList.append({'kart':old_kart,'quality':old_quality,'broken':old_broken})
+        spareList.remove(index)
+
+
+    }
+
+
+    /*function swapKart(index) {
         var arrived_kart=raceList.get(index).kart
         var arrived_team=raceList.get(index).team
         var arrived_quality=raceList.get(index).quality
@@ -214,11 +302,11 @@ Column{
         pitList.remove(0)
         pitList.append({'kart':arrived_kart,'quality':arrived_quality,'team':'','lifetime':0})
 
-    }
+    }*/
     function fillListWithKarts(list,size,startfrom) {
         var kart=startfrom
         for (var i=1;i<=size;i++) {
-            list.append({'kart':kart++,'team':'','lifetime':0,'quality':-5,'hottime':main.timeToShift*60})
+            list.append({'kart':kart++,'team':'','lifetime':0,'quality':-5,'hottime':main.timeToShift*60, 'broken':false})
         }
         return kart
     }
