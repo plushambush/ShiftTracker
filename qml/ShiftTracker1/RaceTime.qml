@@ -5,6 +5,7 @@ Text {
     property int counter:0
     text:intToTime(counter)
 
+    onCounterChanged: text=intToTime(counter)
 
     function intToTime(v) {
         if (v<=0) return ""

@@ -4,9 +4,11 @@ import "Sort.js" 1.0 as Sort
 Column{
     id: raceManager
     property string sortorder:"number"
+    property int racetime:0
     //anchors.horizontalCenter: parent.horizontalCenter
     width:320
     spacing:25
+    
 
 
     GridDecor {
@@ -129,11 +131,13 @@ Column{
     signal reset()
 
     onRaceTimeTick: {
+        racetime++
         for(var i=0;i<raceList.count;i++) raceList.setProperty(i,'lifetime',raceList.get(i).lifetime+1)
 
     }
 
     onRaceTimeReset: {
+        racetime=0
         for(var i=0;i<raceList.count;i++) raceList.setProperty(i,'lifetime',0)
     }
 

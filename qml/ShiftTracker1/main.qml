@@ -2,16 +2,16 @@ import QtQuick 1.1
 
 Flipable {
     id:main
-    width: 600
-    height:650
+    width: 650
+    height:600
 
     property bool flipped: false
     transform: Rotation {
         id: rotation
         origin.x: main.width/2
         origin.y: main.height/2
-        axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
-        angle: 0    // the default angle
+        axis.x: 0; axis.y: 1; axis.z: 0
+        angle: 0
     }
     states: State {
         name: "back"
@@ -25,6 +25,23 @@ Flipable {
     ListModel {id: raceList}
     ListModel {id: pitList}
     ListModel {id: spareList}
+    ListModel {
+        id: logList
+        ListElement {
+            opn:0
+            time:10
+            team:12
+            from_kart:1
+            to_kart:2
+        }
+        ListElement {
+            opn:0
+            time:10
+            team:12
+            from_kart:1
+            to_kart:2
+        }
+    }
 
     property int kartsInRace:12
     property int kartsInPit:4
@@ -34,8 +51,10 @@ Flipable {
     front:Root {
         id:root;
         Column {
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
             anchors.fill:parent
-            spacing: 30
+            spacing: 25
             TopMenu {
                 id:raceMenu
                 onStartRace: raceTimer.start()
@@ -49,8 +68,14 @@ Flipable {
                 }
             }
 
+            Row {
 
-            RaceManager {id:raceManager}
+                spacing:30
+                //anchors.left: parent.left
+                //anchors.right:parent.right
+                LogManager {id:logManager;width:250;height:520}
+                RaceManager {id:raceManager;width:600; height:520}
+            }
         }
 
 
