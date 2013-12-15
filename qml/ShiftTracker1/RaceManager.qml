@@ -6,7 +6,7 @@ Column{
     property string sortorder:"number"
     //anchors.horizontalCenter: parent.horizontalCenter
     width:320
-    spacing:25
+    spacing:20
 
     property int rt:0
 

@@ -31,6 +31,7 @@ Rectangle {
                 text:Util.intToTime(time)
                 id:optime
                 anchors.centerIn:parent
+                font.pointSize: 14
             }
         }
         Image {
@@ -38,6 +39,7 @@ Rectangle {
             Text {
                 id:team
                 anchors.centerIn:parent
+                font.pointSize: 14
             }
         }
 
@@ -66,6 +68,7 @@ Rectangle {
             Text {
                 id:from_kart
                 anchors.centerIn:parent
+                font.pointSize: 14
             }
         }
         Image {
@@ -99,6 +102,7 @@ Rectangle {
             Text {
                 id:to_kart
                 anchors.centerIn:parent
+                font.pointSize: 14
             }
 
         }

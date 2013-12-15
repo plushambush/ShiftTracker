@@ -3,7 +3,7 @@ import QtQuick 1.1
 Flipable {
     id:main
     width: 650
-    height:600
+    height:550
 
     property bool flipped: false
     transform: Rotation {
@@ -71,8 +71,8 @@ Flipable {
                 spacing:30
                 //anchors.left: parent.left
                 //anchors.right:parent.right
-                LogManager {id:logManager;width:250;height:520}
-                RaceManager {id:raceManager;width:600; height:520}
+                LogManager {id:logManager;width:250;height:490}
+                RaceManager {id:raceManager;width:600; height:490}
             }
         }
 
