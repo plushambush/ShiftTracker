@@ -9,24 +9,24 @@ Column{
     //property int hottime:10
     property string sortorder:"number"
     anchors.horizontalCenter: parent.horizontalCenter
-    spacing:30
+    spacing:22
 
 
     GridDecor {
         id: raceRect
         name:"Race"
         width:320
-        height:320
+        height:290
         anchors.horizontalCenter: parent.horizontalCenter;
         GridView {
             id: raceGrid
             boundsBehavior: Flickable.StopAtBounds
-            anchors.topMargin: 13
-            anchors.leftMargin: 13
+            anchors.topMargin: 4
+            anchors.leftMargin: 4
             anchors.fill: parent
 
-            cellWidth: 75
-            cellHeight: 75
+            cellWidth: 79
+            cellHeight: 70
             snapMode: GridView.SnapToRow
             model: raceList;
             delegate: Item {

@@ -10,7 +10,7 @@ Rectangle {
     Text {
         id:text
         font.family: "Impact"
-        font.pixelSize: 26
+        font.pixelSize: 18
         opacity: 0.3
         anchors.bottom: parent.top
     }

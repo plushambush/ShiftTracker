@@ -3,7 +3,7 @@ import QtQuick 1.1
 Flipable {
     id:main
     width: 600
-    height:650
+    height:550
 
     property bool flipped: false
     transform: Rotation {
@@ -35,7 +35,7 @@ Flipable {
         id:root;
         Column {
             anchors.fill:parent
-            spacing: 30
+            spacing: 18
             TopMenu {
                 id:raceMenu
                 onStartRace: raceTimer.start()
