@@ -254,6 +254,7 @@ Column{
         var index=getIndexByProp(raceList,'team',team)
         var old_kart=raceList.get(index).kart
         var old_quality=raceList.get(index).quality
+        var old_bt=raceList.get(index).optime
         var new_kart=pitList.get(0).kart
         var new_quality=pitList.get(0).quality
 
@@ -261,7 +262,7 @@ Column{
         raceList.insert(0,{'kart':new_kart, 'team':team,'quality':new_quality,'optime':rt,'curenttime':rt,'hottime':main.timeToShift*60,'broken':false})
         pitList.remove(0)
         pitList.append({'kart':old_kart,'quality':old_quality,'team':'','optime':0,'broken':false})
-        logManager.addOperation(rt,team,old_kart,new_kart,old_quality,new_quality)
+        logManager.addOperation(rt,old_bt,team,old_kart,new_kart,old_quality,new_quality)
 
     }
 
@@ -276,11 +277,12 @@ Column{
             var from_q=obj.from_kart_q
             var to_q=obj.to_kart_q
             var opn=obj.opn
+            var old_bt=obj.old_bt
 
             var oldkart=getIndexByProp(raceList,'team',team)
             raceList.setProperty(oldkart,'kart',from_kart)
             raceList.setProperty(oldkart,'quality',from_q)
-            raceList.setProperty(oldkart,'optime',time)
+            raceList.setProperty(oldkart,'optime',old_bt)
             raceList.setProperty(oldkart,'currenttime',rt)
 
             pitList.insert(0,{'kart':to_kart,'quality':to_q})
@@ -309,6 +311,7 @@ Column{
         var index=getIndexByProp(raceList,'team',team)
         var old_kart=raceList.get(index).kart
         var old_quality=raceList.get(index).quality
+        var old_bt=raceList.get(index).optime
         var new_kart=pitList.get(0).kart
         var new_quality=pitList.get(0).quality
 
@@ -316,7 +319,7 @@ Column{
         raceList.insert(0,{'kart':new_kart, 'team':team,'quality':new_quality,'optime':rt,'currenttime':rt,'hottime':main.timeToShift*60,'broken':false})
         pitList.remove(0)
         pitList.append({'kart':old_kart,'quality':old_quality,'team':'','lifetime':0, 'broken':true})
-
+        logManager.addOperation(rt,old_bt,team,old_kart,new_kart,old_quality,new_quality)
     }
 
     function pitDoMove(raceList,pitList,spareList,kart) {

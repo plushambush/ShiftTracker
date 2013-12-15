@@ -2,7 +2,7 @@ import QtQuick 1.1
 
 GridDecor {
     name:"Log"
-    signal addOperation(int time,int team,int from_kart,int to_kart,int from_q,int to_q)
+    signal addOperation(int time,int old_bt,int team,int from_kart,int to_kart,int from_q,int to_q)
     signal reset()
     property int nextrec:0
 
@@ -23,7 +23,7 @@ GridDecor {
     }
 
     onAddOperation:{
-        logManager.model.append({'opn':nextrec++,'time':time,'team':team,'from_kart':from_kart,'to_kart':to_kart,'from_kart_q':from_q,'to_kart_q':to_q})
+        logManager.model.append({'opn':nextrec++,'time':time,'old_bt':old_bt,'team':team,'from_kart':from_kart,'to_kart':to_kart,'from_kart_q':from_q,'to_kart_q':to_q})
         logManager.positionViewAtEnd()
     }
 
