@@ -9,14 +9,15 @@ Rectangle {
 
     property alias team: team_num.text;
     property alias num: kart_num.text;
-    property alias lifetime: time_text.counter
+    property alias optime: time_text.basetime
+    property alias currenttime:time_text.currenttime
     property int quality:-5;
     property int hottime
     property alias broken:broken_img.visible
 
 
-    onLifetimeChanged:   {
-        if (lifetime>hottime) {
+    onCurrenttimeChanged:   {
+        if ((currenttime-optime)>hottime) {
             kart.state= "hot"
         }
         else {
@@ -25,13 +26,23 @@ Rectangle {
     }
 
     onHottimeChanged: {
-        if (lifetime>hottime) {
+        if ((currenttime-optime)>hottime) {
             kart.state= "hot";
         }
         else {
             kart.state= "normal";
         }
     }
+
+    onOptimeChanged: {
+        if ((currenttime-optime)>hottime) {
+            kart.state= "hot";
+        }
+        else {
+            kart.state= "normal";
+        }
+    }
+
 
     onTeamChanged: {
         if ((!team) || (team=='')) {

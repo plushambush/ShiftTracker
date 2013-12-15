@@ -2,10 +2,22 @@ import QtQuick 1.1
 
 Text {
     id:racetime
-    property int counter:0
-    text:intToTime(counter)
+    property int currenttime:0
+    property int basetime:0
 
-    onCounterChanged: text=intToTime(counter)
+    text:intToTime(currenttime-basetime)
+
+    signal tick(int time)
+    signal reset()
+
+
+    onTick: currenttime=time
+    onReset: {
+        currenttime=0
+        basetime=0
+    }
+    onCurrenttimeChanged: text=intToTime(currenttime-basetime)
+    onBasetimeChanged: text=intToTime(currenttime-basetime)
 
     function intToTime(v) {
         if (v<=0) return ""

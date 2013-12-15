@@ -22,26 +22,20 @@ Flipable {
         NumberAnimation { target: rotation; property: "angle"; duration: 500 }
     }
 
+
+
     ListModel {id: raceList}
     ListModel {id: pitList}
     ListModel {id: spareList}
-    ListModel {
-        id: logList
-        ListElement {
+    ListModel {id: logList}
+        /*ListElement {
             opn:0
             time:10
             team:12
             from_kart:1
             to_kart:2
-        }
-        ListElement {
-            opn:0
-            time:10
-            team:12
-            from_kart:1
-            to_kart:2
-        }
-    }
+        }}*/
+
 
     property int kartsInRace:12
     property int kartsInPit:4
@@ -62,9 +56,13 @@ Flipable {
                 onShowSettings: main.flipped=!main.flipped
                 onResetRace: {
                     raceTimer.stop()
+                    raceTimer.reset()
                     raceManager.raceTimeReset()
                     raceMenu.raceTimeReset()
                     raceManager.reset()
+                    logManager.reset()
+
+
                 }
             }
 
@@ -85,11 +83,18 @@ Flipable {
             repeat: true
             running:false
             triggeredOnStart: false
+            property int currenttime:0
+            signal reset()
 
             onTriggered: {
-                raceManager.raceTimeTick()
-                raceMenu.raceTimeTick()
+                currenttime++
+                raceManager.raceTimeTick(currenttime)
+                raceMenu.raceTimeTick(currenttime)
             }
+            onReset: {
+                currenttime=0
+            }
+
         }
 
         Popup {
