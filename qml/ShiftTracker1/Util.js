@@ -1,9 +1,7 @@
 .pragma library
 
 function qs_swap(list,a,b,prop) {
-    //console.log("SWAP "+qs_prop(list,a,prop)+" ("+a+") and "+qs_prop(list,b,prop)+" ("+b+")")
     if ((a===b) || (qs_prop(list,a,prop)===qs_prop(list,b,prop))) return
-    //console.log("before:"+print_list(list,prop))
     if (a<b) {
         list.move(b,a,1)
         list.move(a+1,b,1)
@@ -12,11 +10,32 @@ function qs_swap(list,a,b,prop) {
         list.move(a,b,1)
         list.move(b+1,a,1)
     }
-    //console.log("after :"+print_list(list,prop))
 }
 function qs_prop(list,index,prop) {
+    var p
+    if ((prop[0]==='-') || (prop[0]==='+')) {
+            p=prop.substring(1)
+    }
+    else {
+        p=prop
+    }
+
     var o=list.get(index)
-    return o[prop]
+    if (o) {
+        return o[p]
+    }
+    else {
+        return null
+    }
+}
+
+function qs_propsign(prop) {
+    if (prop[0]==='-') {
+        return false
+    }
+    else {
+        return true
+    }
 }
 
 function qs_part (list,begin,end,pivot,prop) {
@@ -24,12 +43,23 @@ function qs_part (list,begin,end,pivot,prop) {
     qs_swap(list,pivot, end-1,prop);
     var store=begin;
     var ix;
-    for(ix=begin; ix<end-1; ++ix) {
-        if(qs_prop(list,ix,prop)<=piv) {
-            qs_swap(list,store, ix,prop);
-            ++store;
+    if (qs_propsign(prop)) {
+        for(ix=begin; ix<end-1; ++ix) {
+            if(qs_prop(list,ix,prop)<=piv) {
+                qs_swap(list,store, ix,prop);
+                ++store;
+            }
         }
     }
+    else {
+        for(ix=begin; ix<end-1; ++ix) {
+            if(qs_prop(list,ix,prop)>=piv) {
+                qs_swap(list,store, ix,prop);
+                ++store;
+            }
+        }
+    }
+
     qs_swap(list,end-1, store,prop);
     return store;
 }

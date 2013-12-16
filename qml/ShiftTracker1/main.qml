@@ -28,14 +28,6 @@ Flipable {
     ListModel {id: pitList}
     ListModel {id: spareList}
     ListModel {id: logList}
-        /*ListElement {
-            opn:0
-            time:10
-            team:12
-            from_kart:1
-            to_kart:2
-        }}*/
-
 
     property int kartsInRace:12
     property int kartsInPit:4
@@ -129,10 +121,6 @@ Flipable {
              main.flipped=!main.flipped
         }
     }
-
-
-
-
 
 }
 

@@ -44,4 +44,16 @@ GridDecor {
         }
     }
 
+    function updateQuality(kart,quality) {
+        var i
+        for (i=0;i<logManager.model.count;i++) {
+            if (logManager.model.get(i).from_kart==kart) {
+                logManager.model.setProperty(i,'from_kart_q',quality)
+            }
+            if (logManager.model.get(i).to_kart==kart) {
+                logManager.model.setProperty(i,'to_kart_q',quality)
+            }
+        }
+    }
+
 }

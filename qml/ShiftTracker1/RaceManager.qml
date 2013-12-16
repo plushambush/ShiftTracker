@@ -186,12 +186,12 @@ Column{
             var i=getIndexByProp(raceList,'kart',tag)
             var team=raceList.get(i).team
             switch (menuItem) {
-            case "QUALITY_SLOW": {raceList.setProperty(i,'quality',-1);break}
-            case "QUALITY_NEUTRAL": {raceList.setProperty(i,'quality',0);break}
-            case "QUALITY_FAST": {raceList.setProperty(i,'quality',1);break}
-            case "QUALITY_TRASH": {raceList.setProperty(i,'quality',-2);break}
-            case "QUALITY_UNKNOWN":{ raceList.setProperty(i,'quality',-5);break}
-            case "QUALITY_ROCKET": {raceList.setProperty(i,'quality',2);break}
+            case "QUALITY_SLOW": {setQuality(raceList,tag,-1);break}
+            case "QUALITY_NEUTRAL": {setQuality(raceList,tag,0);break}
+            case "QUALITY_FAST": {setQuality(raceList,tag,1);break}
+            case "QUALITY_TRASH": {setQuality(raceList,tag,-2);break}
+            case "QUALITY_UNKNOWN":{setQuality(raceList,tag,-5);break}
+            case "QUALITY_ROCKET": {setQuality(raceList,tag,2);break}
             case "KART_BREAKAGE": {raceDoBreakage(raceList,pitList,spareList,team);break}
             case "KART_SHIFT":{raceDoShift(raceList,pitList,spareList,team);break}
             case "TEAM_DISQUAL":{raceDoDisqual(raceList,pitList,spareList,team);break}
@@ -203,12 +203,12 @@ Column{
             var i=getIndexByProp(pitList,'kart',tag)
 
             switch (menuItem) {
-            case "QUALITY_SLOW": {pitList.setProperty(i,'quality',-1);break}
-            case "QUALITY_NEUTRAL": {pitList.setProperty(i,'quality',0);break}
-            case "QUALITY_FAST": {pitList.setProperty(i,'quality',1);break}
-            case "QUALITY_TRASH": {pitList.setProperty(i,'quality',-2);break}
-            case "QUALITY_UNKNOWN": {pitList.setProperty(i,'quality',-5);break}
-            case "QUALITY_ROCKET": {pitList.setProperty(i,'quality',2);break}
+            case "QUALITY_SLOW": {setQuality(pitList,tag,-1);break}
+            case "QUALITY_NEUTRAL": {setQuality(pitList,tag,0);break}
+            case "QUALITY_FAST": {setQuality(pitList,tag,1);break}
+            case "QUALITY_TRASH": {setQuality(pitList,tag,-2);break}
+            case "QUALITY_UNKNOWN": {setQuality(pitList,tag,-5);break}
+            case "QUALITY_ROCKET": {setQuality(pitList,tag,2);break}
             case "KART_MOVE": {pitDoMove(raceList,pitList,spareList,tag);break}
             case "KART_TOSPARE": {pitDoToSpare(raceList,pitList,spareList,tag);break}
             case "KART_BROKEN": {pitList.setProperty(i,'broken',true);break}
@@ -219,12 +219,12 @@ Column{
             var i=getIndexByProp(spareList,'kart',tag)
 
             switch (menuItem) {
-            case "QUALITY_SLOW": {spareList.setProperty(i,'quality',-1);break}
-            case "QUALITY_NEUTRAL": {spareList.setProperty(i,'quality',0);break}
-            case "QUALITY_FAST": {spareList.setProperty(i,'quality',1);break}
-            case "QUALITY_TRASH": {spareList.setProperty(i,'quality',-2);break}
-            case "QUALITY_UNKNOWN": {spareList.setProperty(i,'quality',-5);break}
-            case "QUALITY_ROCKET": {spareList.setProperty(i,'quality',2);break}
+            case "QUALITY_SLOW": {setQuality(spareList,tag,-1);break}
+            case "QUALITY_NEUTRAL": {setQuality(spareList,tag,0);break}
+            case "QUALITY_FAST": {setQuality(spareList,tag,1);break}
+            case "QUALITY_TRASH": {setQuality(spareList,tag,-2);break}
+            case "QUALITY_UNKNOWN": {setQuality(spareList,tag,-5);break}
+            case "QUALITY_ROCKET": {setQuality(spareList,tag,2);break}
             case "KART_TOPIT": {spareDoToPit(raceList,pitList,spareList,tag);break}
             case "KART_BROKEN": {spareList.setProperty(i,'broken',true);break}
             case "KART_REPAIRED": {spareList.setProperty(i,'broken',false);break}
@@ -238,6 +238,13 @@ Column{
             break
         }
         }
+    }
+
+
+    function setQuality(list,kart,quality)  {
+        var i=getIndexByProp(list,'kart',kart)
+        list.setProperty(i,'quality',quality)
+        logManager.updateQuality(kart,quality)
     }
 
     function getIndexByProp(list,prop,val) {
@@ -261,7 +268,7 @@ Column{
         raceList.remove(index)
         raceList.insert(0,{'kart':new_kart, 'team':team,'quality':new_quality,'optime':rt,'curenttime':rt,'hottime':main.timeToShift*60,'broken':false})
         pitList.remove(0)
-        pitList.append({'kart':old_kart,'quality':old_quality,'team':'','optime':0,'broken':false})
+        pitList.append({'kart':old_kart,'quality':old_quality,'team':null,'optime':0,'broken':false})
         logManager.addOperation(rt,old_bt,team,old_kart,new_kart,old_quality,new_quality)
 
     }
@@ -304,7 +311,7 @@ Column{
         var old_kart=raceList.get(index).kart
         var old_quality=raceList.get(index).quality
         raceList.remove(index)
-        pitList.append({'kart':old_kart,'quality':old_quality,'team':'','lifetime':0})
+        pitList.append({'kart':old_kart,'quality':old_quality,'team':null,'lifetime':0})
     }
 
     function raceDoBreakage(raceList,pitList,spareList,team) {
@@ -318,7 +325,7 @@ Column{
         raceList.remove(index)
         raceList.insert(0,{'kart':new_kart, 'team':team,'quality':new_quality,'optime':rt,'currenttime':rt,'hottime':main.timeToShift*60,'broken':false})
         pitList.remove(0)
-        pitList.append({'kart':old_kart,'quality':old_quality,'team':'','lifetime':0, 'broken':true})
+        pitList.append({'kart':old_kart,'quality':old_quality,'team':null,'lifetime':0, 'broken':true})
         logManager.addOperation(rt,old_bt,team,old_kart,new_kart,old_quality,new_quality)
     }
 
@@ -355,7 +362,7 @@ Column{
     function fillListWithKarts(list,size,startfrom) {
         var kart=startfrom
         for (var i=1;i<=size;i++) {
-            list.append({'kart':kart++,'team':'','optime':0,'currenttime':0,'quality':-5,'hottime':main.timeToShift*60, 'broken':false})
+            list.append({'kart':kart++,'team':null,'optime':0,'currenttime':0,'quality':-5,'hottime':main.timeToShift*60, 'broken':false})
         }
         return kart
     }

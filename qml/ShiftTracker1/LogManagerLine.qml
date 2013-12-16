@@ -11,8 +11,8 @@ Rectangle {
     property alias team:team.text
     property alias from_kart:from_kart.text
     property alias to_kart:to_kart.text
-    property int old_q
-    property int new_q
+    property alias old_q:fromKartIcon.quality
+    property alias new_q:toKartIcon.quality
     width:childrenRect.width
     height:childrenRect.height+1
 
@@ -44,27 +44,8 @@ Rectangle {
         }
 
         Rectangle {color:"transparent";width:20;height:20}
-        Image {
-            source:{  switch (old_q ) {
-                case -2:
-                    "img/l_K1.png"
-                    break
-                case -1:
-                    "img/l_K2.png"
-                    break
-                case 0:
-                    "img/l_K3.png"
-                    break
-                case 1:
-                    "img/l_K5.png"
-                    break
-                case 2:
-                    "img/l_K6.png"
-                    break
-                default:
-                    "img/l_K4.png"
-                }
-            }
+        VKartSmall {
+            id: fromKartIcon
             Text {
                 id:from_kart
                 anchors.centerIn:parent
@@ -75,30 +56,8 @@ Rectangle {
             source:"img/l_right.png"
             //anchors.verticalCenter: parent.verticalCenter
         }
-        Image {
-            source:{  switch (new_q ) {
-                case -2:
-                    "img/l_K1.png"
-                    break
-                case -1:
-                    "img/l_K2.png"
-                    break
-                case 0:
-                    "img/l_K3.png"
-                    break
-                case 1:
-                    "img/l_K5.png"
-                    break
-                case 2:
-                    "img/l_K6.png"
-                    break
-                default:
-                    "img/l_K4.png"
-                }
-            }
-
-
-
+        VKartSmall {
+            id:toKartIcon
             Text {
                 id:to_kart
                 anchors.centerIn:parent
