@@ -27,4 +27,5 @@ qtcAddDeployment()
 OTHER_FILES += \
     qml/ShiftTracker1/VKart.qml \
     Sort.js \
-    qml/ShiftTracker1/ShiftPopupMenu.qml
+    qml/ShiftTracker1/ShiftPopupMenu.qml \
+    qml/ShiftTracker1/Util.js

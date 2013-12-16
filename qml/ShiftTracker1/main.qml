@@ -2,7 +2,7 @@ import QtQuick 1.1
 
 Flipable {
     id:main
-    width: 600
+    width: 650
     height:550
 
     property bool flipped: false
@@ -10,8 +10,8 @@ Flipable {
         id: rotation
         origin.x: main.width/2
         origin.y: main.height/2
-        axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
-        angle: 0    // the default angle
+        axis.x: 0; axis.y: 1; axis.z: 0
+        angle: 0
     }
     states: State {
         name: "back"
@@ -22,9 +22,12 @@ Flipable {
         NumberAnimation { target: rotation; property: "angle"; duration: 500 }
     }
 
+
+
     ListModel {id: raceList}
     ListModel {id: pitList}
     ListModel {id: spareList}
+    ListModel {id: logList}
 
     property int kartsInRace:12
     property int kartsInPit:4
@@ -34,8 +37,10 @@ Flipable {
     front:Root {
         id:root;
         Column {
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
             anchors.fill:parent
-            spacing: 18
+            spacing: 25
             TopMenu {
                 id:raceMenu
                 onStartRace: raceTimer.start()
@@ -43,14 +48,24 @@ Flipable {
                 onShowSettings: main.flipped=!main.flipped
                 onResetRace: {
                     raceTimer.stop()
+                    raceTimer.reset()
                     raceManager.raceTimeReset()
                     raceMenu.raceTimeReset()
                     raceManager.reset()
+                    logManager.reset()
+
+
                 }
             }
 
+            Row {
 
-            RaceManager {id:raceManager}
+                spacing:30
+                //anchors.left: parent.left
+                //anchors.right:parent.right
+                LogManager {id:logManager;width:250;height:490}
+                RaceManager {id:raceManager;width:600; height:490}
+            }
         }
 
 
@@ -60,11 +75,18 @@ Flipable {
             repeat: true
             running:false
             triggeredOnStart: false
+            property int currenttime:0
+            signal reset()
 
             onTriggered: {
-                raceManager.raceTimeTick()
-                raceMenu.raceTimeTick()
+                currenttime++
+                raceManager.raceTimeTick(currenttime)
+                raceMenu.raceTimeTick(currenttime)
             }
+            onReset: {
+                currenttime=0
+            }
+
         }
 
         Popup {
@@ -99,10 +121,6 @@ Flipable {
              main.flipped=!main.flipped
         }
     }
-
-
-
-
 
 }
 

@@ -1,9 +1,9 @@
-import QtQuick 2.0
+import QtQuick 1.1
 
 Item {
     property int value:0
     property int increment:1
-    signal reset
+    signal reset()
 
     onReset: doReset()
     function nextValue() {

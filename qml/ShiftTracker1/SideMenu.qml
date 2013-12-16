@@ -25,7 +25,7 @@ Column {
     MenuElementIconOnly {
         radius:4
         icon:"img/sortt.png"
-        eventid:"lifetime"
+        eventid:"-optime"
         onMenuItemSelected: menuSelected(eventid)
     }
 

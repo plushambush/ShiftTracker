@@ -41,24 +41,27 @@ HorizontalMenu {
     HorizontalMenuItem {
         id:reset
         text:"Reset"
-        onHorizontalMenuItemClicked: resetRace()
+        onHorizontalMenuItemClicked: {
+            startstop.state="Stopped"
+            resetRace()
+        }
     }
     HorizontalMenuItem {
         id:timer
-        text:time.text
-        RaceTime {id:time;visible:false}
+        text:rtime.text
+        RaceTime {id:rtime;visible:false}
     }
 
-    signal showSettings
-    signal startRace
-    signal stopRace
-    signal resetRace
+    signal showSettings()
+    signal startRace()
+    signal stopRace()
+    signal resetRace()
     signal raceTimeReset()
-    signal raceTimeTick()
+    signal raceTimeTick(int time)
 
-    onRaceTimeTick: time.counter++
+    onRaceTimeTick: rtime.tick(time)
 
-    onRaceTimeReset: time.counter=0
+    onRaceTimeReset: rtime.reset()
 
 
 
