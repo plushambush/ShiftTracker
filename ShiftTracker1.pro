@@ -15,7 +15,8 @@ QML_IMPORT_PATH =
 # CONFIG += qdeclarative-boostable
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    qmlapplicationviewer/stviewer.cpp
 
 # Installation path
 # target.path =
@@ -29,3 +30,6 @@ OTHER_FILES += \
     Sort.js \
     qml/ShiftTracker1/ShiftPopupMenu.qml \
     qml/ShiftTracker1/Util.js
+
+HEADERS += \
+    qmlapplicationviewer/stviewer.h
