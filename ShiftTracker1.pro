@@ -1,7 +1,7 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/ShiftTracker1
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01
+folder_qml.source = qml
+folder_qml.target = /
+DEPLOYMENTFOLDERS = folder_qml
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
@@ -16,7 +16,7 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    qmlapplicationviewer/stviewer.cpp
+    stviewer.cpp
 
 # Installation path
 # target.path =
@@ -26,10 +26,10 @@ include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    qml/ShiftTracker1/VKart.qml \
-    Sort.js \
-    qml/ShiftTracker1/ShiftPopupMenu.qml \
-    qml/ShiftTracker1/Util.js
+    js/Util.js
 
 HEADERS += \
-    qmlapplicationviewer/stviewer.h
+    stviewer.h
+
+RESOURCES += \
+    qml.qrc

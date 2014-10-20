@@ -19,7 +19,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     STViewer viewer;
     viewer.addImportPath(QLatin1String("modules"));
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.setMainQmlFile(QLatin1String("qml/ShiftTracker1/main.qml"));
+    viewer.setSource(QUrl("qrc:/qml/main.qml"));
     viewer.showExpanded();
 
     return app->exec();

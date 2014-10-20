@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "Util.js" 1.0 as Util
+import ":js/Util.js" 1.0 as Util
 
 Text {
     id:racetime

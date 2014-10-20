@@ -6,8 +6,9 @@
 class STViewer : public QmlApplicationViewer
 {
     Q_OBJECT
+public:
 
-    explicit  STViewer(QWidget *parent=0);
+    explicit STViewer(QWidget *parent=0);
 
     void closeEvent(QCloseEvent *event);
 
